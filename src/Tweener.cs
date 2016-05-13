@@ -19,7 +19,7 @@ namespace Between {
             // If there's no lerp function specified, use Generic Default
             _lerpFunc = lerpFunc;// ?? LerpFuncDefault;
 
-            Value = _start;z
+            Value = _start;
             Running = true;
         }
 
