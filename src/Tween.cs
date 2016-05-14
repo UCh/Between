@@ -1,30 +1,11 @@
 using System;
 
 namespace Between {
-    public delegate float EaseFunc(float percent);
-
     public delegate T LerpFunc<T>(T start, T end, float percent);
 
-    public class Tweener<T> {
+    public class Tween<T> {
 
-        public Tweener(T start, T end, float duration, EaseFunc easeFunc = null, LerpFunc<T> lerpFunc = null) {
-            _elapsed = 0.0f;
-            _start = start;
-            _end = end;
-            _duration = duration;
-
-            // If there's no ease function specified, use Linear
-            _easeFunc = easeFunc ?? Ease.Linear;
-
-            // If there's no lerp function specified, use Generic Default
-            _lerpFunc = lerpFunc;// ?? LerpFuncDefault;
-
-            Value = _start;
-            Running = true;
-        }
-
-        public Tweener(T start, T end, TimeSpan duration, EaseFunc easeFunc = null, LerpFunc<T> lerpFunc = null) : this(start, end, (float)duration.TotalSeconds, easeFunc, lerpFunc) {
-        }
+        public event Action<Tween<T>> Completed;
 
         public T Value { get; private set; }
 
@@ -37,9 +18,19 @@ namespace Between {
         private EaseFunc _easeFunc;
         private LerpFunc<T> _lerpFunc;
 
-        public delegate void OnEndHandler(object sender, EventArgs e);
 
-        public event OnEndHandler OnEnd;
+        public Tween(T start, T end, float duration, LerpFunc<T> lerpFunc, EaseFunc easeFunc = null) {
+            _elapsed = 0.0f;
+            _start = start;
+            _end = end;
+            _duration = duration;
+
+            _easeFunc = easeFunc ?? Ease.Linear;
+            _lerpFunc = lerpFunc;
+
+            Value = _start;
+            Running = true;
+        }
 
         public void Update(float deltaTime) {
 
@@ -61,20 +52,15 @@ namespace Between {
             Value = Calculate(_start, _end, _elapsed / _duration, _easeFunc, _lerpFunc);
         }
 
-
-        //        private static T LerpFuncDefault(T start, T end, float percent) {
-
-        //        }
-
         private static T Calculate(T start, T end, float percent, EaseFunc easeFunc, LerpFunc<T> lerpFunc) {
             float scaledPercent = easeFunc(percent);
             return lerpFunc(start, end, scaledPercent);
         }
 
         private void Ended() {
-            if (OnEnd != null)
+            if (Completed != null)
             {
-                OnEnd(this, EventArgs.Empty);
+                Completed(this);
             }
         }
 

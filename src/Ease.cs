@@ -1,4 +1,6 @@
 namespace Between {
+    public delegate float EaseFunc(float percent);
+
     public interface IEase {
         float In(float percent);
 
