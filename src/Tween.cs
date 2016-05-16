@@ -44,7 +44,10 @@ namespace Between {
                 var unusedTime = _elapsed - _duration;
                 _elapsed = _duration;
                 Value = Calculate(_start, _end, 1, _easeFunc, _lerpFunc);
-
+                if(ValueUpdated != null)
+                {
+                    ValueUpdated(Value);
+                }
                 Stop();
                 Ended(unusedTime);
 
