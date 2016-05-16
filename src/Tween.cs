@@ -5,7 +5,8 @@ namespace Between {
 
     public class Tween<T> {
 
-        public event Action<Tween<T>> Completed;
+        public event Action<float> Completed;
+        public event Action<T> ValueUpdated;
 
         public T Value { get; private set; }
 
@@ -40,16 +41,21 @@ namespace Between {
 
             if (_elapsed >= _duration)
             {
+                var unusedTime = _elapsed - _duration;
                 _elapsed = _duration;
                 Value = Calculate(_start, _end, 1, _easeFunc, _lerpFunc);
 
                 Stop();
-                Ended();
+                Ended(unusedTime);
 
                 return;
             }
 
             Value = Calculate(_start, _end, _elapsed / _duration, _easeFunc, _lerpFunc);
+            if(ValueUpdated != null)
+            {
+                ValueUpdated(Value);
+            }
         }
 
         private static T Calculate(T start, T end, float percent, EaseFunc easeFunc, LerpFunc<T> lerpFunc) {
@@ -57,10 +63,10 @@ namespace Between {
             return lerpFunc(start, end, scaledPercent);
         }
 
-        private void Ended() {
+        private void Ended(float unusedTime) {
             if (Completed != null)
             {
-                Completed(this);
+                Completed(unusedTime);
             }
         }
 
