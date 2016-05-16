@@ -1,9 +1,8 @@
 using UnityEngine;
 
 namespace Between.Unity {
-
+    
     public class IntTween : Tween<int> {
-
         public IntTween(int start, int end, float duration, Between.EaseFunc easeFunc = null) : base(start, end, duration, LerpFunction.IntLerp, easeFunc) {
         }
     }
