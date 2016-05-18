@@ -25,7 +25,7 @@ namespace Between.Unity {
 
     public class Vector3Tween : Tween<Vector3> {
 
-        public Vector3Tween(Vector3 start, Vector2 end, float duration, Between.EaseFunc easeFunc = null) : base(start, end, duration, Vector3.Lerp, easeFunc) {
+        public Vector3Tween(Vector3 start, Vector3 end, float duration, Between.EaseFunc easeFunc = null) : base(start, end, duration, Vector3.Lerp, easeFunc) {
         }
     }
 
