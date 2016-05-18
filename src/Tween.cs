@@ -6,6 +6,7 @@ namespace Between {
     public class Tween<T> {
 
         public event Action<float> Completed;
+
         public event Action<T> ValueUpdated;
 
         public T Value { get; private set; }
@@ -44,7 +45,7 @@ namespace Between {
                 var unusedTime = _elapsed - _duration;
                 _elapsed = _duration;
                 Value = Calculate(_start, _end, 1, _easeFunc, _lerpFunc);
-                if(ValueUpdated != null)
+                if (ValueUpdated != null)
                 {
                     ValueUpdated(Value);
                 }
@@ -55,7 +56,7 @@ namespace Between {
             }
 
             Value = Calculate(_start, _end, _elapsed / _duration, _easeFunc, _lerpFunc);
-            if(ValueUpdated != null)
+            if (ValueUpdated != null)
             {
                 ValueUpdated(Value);
             }
